@@ -1,4 +1,4 @@
-#!/home/antonio/.anaconda3/bin/python
+#!/user/bin/env python
 
 import sys
 
