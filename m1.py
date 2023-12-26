@@ -1,8 +1,6 @@
-#!/user/bin/env python
+#!/usr/bin/python3
 
 import sys
- 
-lineas_filtradas = []
  
 for line in sys.stdin:    
     columnas = line.split(";")
