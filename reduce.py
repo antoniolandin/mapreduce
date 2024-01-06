@@ -1,19 +1,21 @@
 #!/usr/bin/python3
 
 import sys
-from collections import defaultdict # porque me da error sin esta libreria ?????
+from collections import defaultdict
 
 def reducer():
-    domains = defaultdict(int)
+    filetype_bytes = defaultdict(int)
 
     for line in sys.stdin:
         key, value = line.strip().split('\t')
-        domains[key] += int(value)
+        domain, file_type = key.split(',')
+        bytes = int(value)
 
-    top = sorted(domains.items(), key = lambda x: x[1], reverse = True)[:3]
+        filetype_bytes[file_type] += bytes
 
-    for domain, bytes in top:
-        print(f'Dominio: "{domain}" - bytes: {bytes}')
+    top_filetypes = sorted(filetype_bytes.items(), key=lambda x: x[1], reverse=True)[:3]
+    for file_type, bytes in top_filetypes:
+        print(f'Tipo de archivo: {file_type} {bytes}')
 
 if __name__ == "__main__":
     reducer()

@@ -8,13 +8,13 @@ import sys
 primerDominio = True
 
 aux = None
-diccionario = defaultdict(int)   #En el diccionario almacenaremos los nombres de los dominios y los bytes totales
+diccionario = defaultdict(int)                  #En el diccionario almacenaremos los nombres de los dominios y los bytes totales
 
 for line in sys.stdin: 
-    aux, numBytes = line.strip().split('\t')
+    aux, numBytes = line.strip().split('\t')    #Si el separador no es \t no funciona
 
     #Sumamos al diccionario los bytes correspondientes a su key
-    diccionario[aux] += int(numBytes)       #No se porqué no detectaba que le he pasado int 
+    diccionario[aux] += int(numBytes) 
 
 diccionario_ordenado = sorted(diccionario.items(),key=lambda item:item[1], reverse=True)
 
