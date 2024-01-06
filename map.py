@@ -1,19 +1,17 @@
 #!/usr/bin/python3
-
 import sys
-
-def is_numeric(value):
-    try:
-        float(value)
-        return True
-    except ValueError:
-        return False
 
 def mapper():
     for line in sys.stdin:
         fields = line.strip().split(';')
-        if len(fields) >= 8 and is_numeric(fields[7]): 
-            print(f'{fields[4]}\t{fields[7][0]}')
 
+        if len(fields) >= 8:
+            try: 
+                domain = fields[0]
+                bytes = int(fields[8].strip())
+                print(f'{domain}\t{bytes}')
+            except ValueError:
+                continue
+            
 if __name__ == "__main__":
     mapper()

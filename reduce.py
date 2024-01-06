@@ -1,16 +1,19 @@
 #!/usr/bin/python3
 
 import sys
-from collections import defaultdict
+from collections import defaultdict # porque me da error sin esta libreria ?????
 
 def reducer():
-    counts = defaultdict(int)
+    domains = defaultdict(int)
+
     for line in sys.stdin:
         key, value = line.strip().split('\t')
-        counts[key + ' ' + value + 'XX'] += 1
+        domains[key] += int(value)
 
-    for key, count in counts.items():
-        print(f"{key}: {count}")
+    top = sorted(domains.items(), key = lambda x: x[1], reverse = True)[:3]
+
+    for domain, bytes in top:
+        print(f'Dominio: "{domain}" - bytes: {bytes}')
 
 if __name__ == "__main__":
     reducer()
