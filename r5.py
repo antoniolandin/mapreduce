@@ -1,16 +1,12 @@
 #!/usr/bin/python3
 
-
 import sys
 
-file_type = []
+aux = None  #Auxiliar de control
 
-for line in sys.stdin:
-
-    linea_limpia = line.strip()
-
-    if linea_limpia not in file_type:
-        
-        file_type.append(linea_limpia)
-
-print(file_type)
+for line in sys.stdin: 
+    extension = line.strip().lstrip(".")
+    #Podemos utilizar una única variable temporal para agrupar todo
+    if (aux != extension):
+        print(aux)
+    aux = extension
