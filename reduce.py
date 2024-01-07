@@ -1,21 +1,31 @@
 #!/usr/bin/python3
-
 import sys
-from collections import defaultdict
 
 def reducer():
-    filetype_bytes = defaultdict(int)
-
+    temp=['GET']
+    i=0
+    cantidadPet=1
+    bitsGet = balance = 0
+    
     for line in sys.stdin:
-        key, value = line.strip().split('\t')
-        domain, file_type = key.split(',')
-        bytes = int(value)
+        key, value= line.strip().split('\t')
 
-        filetype_bytes[file_type] += bytes
-
-    top_filetypes = sorted(filetype_bytes.items(), key=lambda x: x[1], reverse=True)[:3]
-    for file_type, bytes in top_filetypes:
-        print(f'Tipo de archivo: {file_type} {bytes}')
+        value = value.strip()
+        value = value.rstrip('s')
+        
+        if(temp==key):
+            value=int(value)
+            i=value+i
+        else:
+            if i != 0 and cantidadPet != 0:
+                bitsGet = i/1
+                print(f"Media bits por peticion {temp}: {i/1}")
+            i=0
+            temp=key
+    if i != 0 and cantidadPet != 0:
+        print(f"Media bits por peticion {temp}: {i/1}")
+        balance = bitsGet - i/1
+        print(f"Balance de bits: {balance}")
 
 if __name__ == "__main__":
     reducer()
