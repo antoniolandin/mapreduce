@@ -2,30 +2,43 @@
 import sys
 
 def reducer():
-    temp=['GET']
-    i=0
-    cantidadPet=1
-    bitsGet = balance = 0
-    
-    for line in sys.stdin:
-        key, value= line.strip().split('\t')
+    prev_hour = None
+    prev_value = 0
+    value = 0
+    percentage = 0
 
-        value = value.strip()
-        value = value.rstrip('s')
-        
-        if(temp==key):
-            value=int(value)
-            i=value+i
+    for line in sys.stdin:
+        key , value_str = line.strip().split('\t')
+
+        try:
+            valueTotal = int(value_str)
+        except ValueError:
+            continue
+
+        if prev_hour is None: 
+            prev_hour = key
+
+        if key == prev_hour:
+            value += valueTotal
         else:
-            if i != 0 and cantidadPet != 0:
-                bitsGet = i/1
-                print(f"Media bits por peticion {temp}: {i/1}")
-            i=0
-            temp=key
-    if i != 0 and cantidadPet != 0:
-        print(f"Media bits por peticion {temp}: {i/1}")
-        balance = bitsGet - i/1
-        print(f"Balance de bits: {balance}")
+            if prev_value == 0:
+                percentage = 0
+            else:
+                percentage = (value - prev_value) / (prev_value * 100) 
+
+            print("Hour {:02d} incremento {:.6f}%".format(int(key), percentage))
+
+            prev_hour = key
+            prev_value = value
+            value = valueTotal
+
+    if prev_value == 0:
+        percentage = 0
+    else:
+        percentage = (value - prev_value) / (prev_value * 100) 
+
+    print("Hour {:02d} incremento {:.6f}%".format(int(key), percentage))
+
 
 if __name__ == "__main__":
     reducer()
