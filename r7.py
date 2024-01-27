@@ -1,23 +1,34 @@
 #!/usr/bin/python3
 
-#Información sobre la función que ordena diccionarios por valor
-# https://geekflare.com/es/python-dictionary-sorting/
-
-from collections import defaultdict
+import heapq
 import sys
-primerDominio = True
+
+def top3Heap(heap, peticion, count):
+    # comprobamos si el heap tiene menos de 3 elementos
+    if(len(heap) < 3):
+        heapq.heappush(heap, (count, peticion))
+    else:
+        # comprobamos si el elemento que queremos insertar es mayor que el menor del heap
+        if(count > heap[0][0]):
+            heapq.heappushpop(heap, (count, peticion))
 
 aux = None
-diccionario = defaultdict(int)                  #En el diccionario almacenaremos los nombres de los dominios y los bytes totales
+heap = []
+countBytes = 0
 
 for line in sys.stdin: 
-    aux, numBytes = line.strip().split('\t')    #Si el separador no es \t no funciona
+    peticion, numBytes = line.strip().split("\t")
 
-    #Sumamos al diccionario los bytes correspondientes a su key
-    diccionario[aux] += int(numBytes) 
+    if(aux == None):
+        aux = peticion
+        countBytes = int(numBytes)
+    elif(aux != peticion):
+        top3Heap(heap, aux, countBytes)
+        countBytes = 0
+    else:
+        countBytes += int(numBytes) 
 
-diccionario_ordenado = sorted(diccionario.items(),key=lambda item:item[1], reverse=True)
+    aux = peticion
 
-#Imprimimos solo los 3 primeros
-for i in range(3):
-    print(diccionario_ordenado[i])
+for i in heap[::-1]:
+    print(i[1] + "\t" + str(i[0]))
