@@ -1,22 +1,40 @@
 #!/usr/bin/python3
 
-#Información sobre la función que ordena diccionarios por valor
-# https://geekflare.com/es/python-dictionary-sorting/
-
-from collections import defaultdict
 import sys
+import heapq
+
+def top3Heap(heap, countBytes, dominio, extension):
+    # comprobamos si el heap tiene menos de 3 elementos
+    if(len(heap) < 3):
+        heapq.heappush(heap, (countBytes, dominio, extension))
+    else:
+        # comprobamos si el elemento que queremos insertar es mayor que el menor del heap
+        if(countBytes > heap[0][0]):
+            heapq.heappushpop(heap, (countBytes, dominio, extension))
 
 aux = None
-diccionario = defaultdict(int)  
+dominioAux = None
+heap = []
+countBytes = 0
 
 for line in sys.stdin: 
+
     try:
-        aux, numBytes, extension = line.strip().split('\t')    #Si el separador no es \t no funciona
-        diccionario[extension] += int(numBytes)
-    except ValueError:
-        continue  
+        dominio, numBytes, extension = line.strip().split('\t')    #Si el separador no es \t no funciona
 
-diccionario_ordenado = sorted(diccionario.items(),key=lambda item:item[1], reverse=True)
+        if(aux == None and dominioAux == None):
+            countBytes = int(numBytes)
+        elif(aux != dominio or dominioAux != dominio):
+            top3Heap(heap, countBytes, dominio, extension)
+            countBytes = 0
+        else:
+            countBytes += int(numBytes)
 
-for i in range(3):
-    print(diccionario_ordenado[i])
+        aux = dominio
+        dominioAux = dominio
+
+    except:
+        pass
+
+for i in heap[::-1]:
+    print(i[1] + '\t' + str(i[0]) + '\t' + i[2])
